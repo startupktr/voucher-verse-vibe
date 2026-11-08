@@ -27,32 +27,32 @@ const initialMessages: ChatMessage[] = [
 ];
 
 const AiAssistant = () => {
-  // const [hasSession, setHasSession] = useState(false);
+  const [hasSession, setHasSession] = useState(false);
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   void supabase.auth.getSession().then(({ data }) => {
-  //     if (isMounted) setHasSession(Boolean(data.session));
-  //   });
+  useEffect(() => {
+    let isMounted = true;
+    void supabase.auth.getSession().then(({ data }) => {
+      if (isMounted) setHasSession(Boolean(data.session));
+    });
 
-  //   const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-  //     setHasSession(Boolean(session));
-  //     if (!session) {
-  //       setOpen(false);
-  //       setMessages(initialMessages);
-  //     }
-  //   });
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setHasSession(Boolean(session));
+      if (!session) {
+        setOpen(false);
+        setMessages(initialMessages);
+      }
+    });
 
-  //   return () => {
-  //     isMounted = false;
-  //     authListener.subscription.unsubscribe();
-  //   };
-  // }, []);
+    return () => {
+      isMounted = false;
+      authListener.subscription.unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -137,7 +137,7 @@ const AiAssistant = () => {
     }
   };
 
-  // if (!hasSession) return null;
+  if (!hasSession) return null;
 
   return (
     <>
